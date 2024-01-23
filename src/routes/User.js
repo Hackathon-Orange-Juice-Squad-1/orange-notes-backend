@@ -1,12 +1,11 @@
 const express = require("express")
 const router = express.Router()
-const User = require('./models/User')
+const User = require('../models/User')
+const bcrypt = require('bcrypt')
 
 
 router.get('/', (req, res) =>{
-
     res.json({message: ''})
-
 })
 
 
@@ -30,7 +29,7 @@ router.post('/register', async (req, res) => {
     if(password !== confirmpassword){
         return res.status(422).json({msg: 'As senhas não conferem!'})
     }
-    if(!password.length <= 6){
+    if(password.length <= 6){
         return res.status(422).json({msg: 'A senha precisa ter no mínimo de 7 digitos!'})
         }
 
