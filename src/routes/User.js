@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 
@@ -8,6 +9,20 @@ router.get('/', (req, res) =>{
     res.json({message: ''})
 })
 
+router.get("/user/:id", async(req,res) => {
+
+    const id = req.params.id
+
+    const user = await User.findById(id, '-password')
+
+    if(!user){
+        return res.status(404).json({msg:'Usuário não encontrado'})
+    }
+
+    res.status(200).json({user})
+})
+
+// function checkToken()
 
 router.post('/register', async (req, res) => {
 
@@ -54,13 +69,63 @@ router.post('/register', async (req, res) => {
     } catch(error){
         console.log(error)
 
-        res
-        .status(500)
-        .json({
-            msg:'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!'
-        })
+        res.status(500).json({msg:'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!'})
     }
 })
 
+router.post("/login", async (req, res) =>{
+
+    const {email, password} = req.body
+
+    if(!email){
+        return res.status(422).json({msg: 'O email é obrigatório!'})
+        }
+    if(!password){
+        return res.status(422).json({msg: 'A senha é obrigatória!'})
+        }
+    
+    const UserExists = await User.findOne({email:email})
+
+    if (!UserExists){
+        return res.status(404).json({msg: 'Usuário não encotrado!'})
+    }
+
+    const checkPassword = await bcrypt.compare(password, UserExists.password)
+
+    if(!checkPassword){
+        return res.status(422).json({msg: 'Senha inválida!'})
+    }
+
+    try{
+
+        const secret = process.env.secret
+
+        const token = jwt.sign({
+            id:UserExists._id,
+        },
+            secret,
+        )
+
+        res.status(200).json({msg:'Autenticação realizada com sucesso.', token})
+
+    } catch(error){
+    console.log(error)
+
+    res.status(500).json({
+        msg:'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!'
+    })
+    }
+})
+
+router.post("/login", async(req,res) => {
+
+    if(!email){
+        return res.status(422).json({msg: 'O email é obrigatório!'})
+        }
+    if(!password){
+        return res.status(422).json({msg: 'A senha é obrigatória!'})
+        }
+
+})
 
 module.exports = router

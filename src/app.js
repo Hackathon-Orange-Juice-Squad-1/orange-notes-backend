@@ -19,7 +19,6 @@ app.use(express.json()) //
 // Routes
 app.use('/auth', userRoute)
 
-
 // Conexão com o bando de dados
 mongoose
     .connect(
