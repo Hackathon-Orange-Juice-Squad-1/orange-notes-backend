@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json()) //
 
 // Routes
-app.use('/auth', userRoute)
+app.use('/', userRoute)
 
 // Conexão com o bando de dados
 mongoose.connect(MONGO_URL).then(() =>{

@@ -20,8 +20,12 @@ router.get("/user/:id", async(req,res) => {
 })
 
 
-router.post('/register', userController.cadastro)
+router.get('/', (req, res) => {
+    res.send('Oi')
+})
 
-router.post("/login", userController.login)
+router.post('/auth/register', userController.cadastro)
+
+router.post("/auth/login", userController.login)
 
 module.exports = router
