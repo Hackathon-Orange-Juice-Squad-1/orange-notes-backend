@@ -55,7 +55,7 @@ class UserController {
     
         } catch(error){
             console.log(error)
-            res.status(500).json({ msg:'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!'})
+            res.status(500).json({ msg:'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!', error})
         }
     }
 
