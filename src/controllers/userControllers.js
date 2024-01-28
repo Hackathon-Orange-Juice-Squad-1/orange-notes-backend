@@ -53,11 +53,11 @@ class UserController {
     try {
       const { secret } = process.env;
       const token = jwt.sign({ id: UserExists._id, }, secret,);
-      res.cookie("jwt", token,{
-        maxAge: 900000, 
-        httpOnly: true,
-        secure: false
-      })
+      // res.cookie("jwt", token,{
+      //   maxAge: 900000, 
+      //   httpOnly: true,
+      //   secure: false
+      // })
       res.status(200).json({ msg: 'Autenticação realizada com sucesso.', token });
     } catch (error) {
       console.log(error);
