@@ -14,6 +14,7 @@ class UserController {
       if (!last_name) return res.status(422).json({ msg: 'O sobrenome é obrigatório!' });
       if (!email) return res.status(422).json({ msg: 'O email é obrigatório!' });
       if (!password) return res.status(422).json({ msg: 'A senha é obrigatória!' });
+      if (typeof password !== 'string') return res.status(422).json({ msg: 'Sua senha precisa ser uma string' });
       if (password !== confirmpassword) return res.status(422).json({ msg: 'As senhas não conferem!' });
       if (password.length <= 6) return res.status(422).json({ msg: 'A senha precisa ter no mínimo de 7 digitos!' });
       // checagem de email existente
@@ -53,11 +54,11 @@ class UserController {
     try {
       const { secret } = process.env;
       const token = jwt.sign({ id: UserExists._id, }, secret,);
-      // res.cookie("jwt", token,{
-      //   maxAge: 900000, 
-      //   httpOnly: true,
-      //   secure: false
-      // })
+      res.cookie("jwt", token,{
+        maxAge: 900000, 
+        httpOnly: true,
+        secure: false
+      })
       res.status(200).json({ msg: 'Autenticação realizada com sucesso.', token });
     } catch (error) {
       console.log(error);
