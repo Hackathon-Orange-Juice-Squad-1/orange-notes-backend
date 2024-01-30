@@ -21,7 +21,7 @@ const projetoSchema = new mongoose.Schema({
       },
     },
     dataAtualizacao: {
-      type: String, // Mudando o tipo para string
+      type: String, 
       default: () => {
         const now = new Date();
         const dia = now.getDate().toString().padStart(2, '0'); // Garante que tenha dois dígitos

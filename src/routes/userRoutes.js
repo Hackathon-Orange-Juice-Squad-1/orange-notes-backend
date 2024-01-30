@@ -18,7 +18,9 @@ router.get('/', (req, res) => {res.send('API SQUAD1 ORANGE >> ONLINE!')})
 router.get("/projetos/:id", projetoController.mostrarProjeto) //Retorna projetos do usuário pro front
 //router.post("/projetos/:id", projetoController.cadastrarProjeto) //Cadastra projetos dos usuários
 router.post("/projetos/imagem/:id", multer(multerConfig).single('file'),async (req, res) => {
-    const { originalname: name, size, key } = req.file  
+    const { originalname: name, size, key, url = '' } = req.file
+
+    console.log(req.body);
 
     const id = req.params.id 
     const {title, tags, link, desc} = req.body
@@ -30,7 +32,7 @@ router.post("/projetos/imagem/:id", multer(multerConfig).single('file'),async (r
     if (!desc) return res.status(422).json({ msg: 'A descrição é obrigatório!' });
 
     const user = await User.findById(id, '-password')
-    const projeto = {title, tags, link, desc, image: [name, size, key]}
+    const projeto = {title, tags, link, desc, image: [name, size, key, url]}
 
     try{
         user.projetos.push(projeto) 
