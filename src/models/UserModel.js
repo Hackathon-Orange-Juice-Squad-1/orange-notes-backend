@@ -5,6 +5,12 @@ const projetoSchema = new mongoose.Schema({
     tags: {type: String, required: true},
     link: {type: String, required: true},
     desc: {type: String, required: true},
+    image: {
+      name: {type: String},
+      size: {type: Number},
+      key: {type: String},
+      url: {type: String},
+    },
     dataCriacao: {
       type: String,
       default: () => {
