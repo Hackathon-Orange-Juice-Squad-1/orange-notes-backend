@@ -15,10 +15,15 @@ router.get('/', (req, res) => {res.send('API SQUAD1 ORANGE >> ONLINE!')})
 
 // PROJETOS
 
+router.delete("projetos/:id", async (req, res) => {
+
+})
+
+router.get("/projetos/all", projetoController.mostrarTodosProjetos)
 router.get("/projetos/:id", projetoController.mostrarProjeto) //Retorna projetos do usuário pro front
 router.post("/projetos/:id", multer(multerConfig).single('file'), projetoController.cadastrarProjeto)
 
-// AUTH
+// AUTH 
 
 router.post('/auth/register', userController.cadastro)
 router.post("/auth/login", userController.login)
