@@ -16,7 +16,7 @@ router.get('/', (req, res) => {res.send('API SQUAD1 ORANGE >> ONLINE!')})
 // PROJETOS
 
 router.get("/projetos/:id", projetoController.mostrarProjeto) //Retorna projetos do usuário pro front
-//router.post("/projetos/:id", projetoController.cadastrarProjeto) //Cadastra projetos dos usuários
+router.post("/projetos/:id", projetoController.cadastrarProjeto) //Cadastra projetos dos usuários
 router.post("/projetos/imagem/:id", multer(multerConfig).single('file'),async (req, res) => {
     const { originalname: name, size, key, url = '' } = req.file
 
