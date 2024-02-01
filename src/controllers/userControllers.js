@@ -31,7 +31,9 @@ class UserController {
 
       try {
         await user.save();
-        res.status(201).json({ msg: 'Usuário criado com sucesso!' });
+        const { secret } = process.env;
+        const token = jwt.sign({ id: user._id, }, secret,);
+        res.status(201).json({ msg: 'Usuário criado com sucesso!', token});
       } catch (error) {
         console.log(error);
         res.status(500).json({ msg: 'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!' });
