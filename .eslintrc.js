@@ -22,13 +22,11 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
-    "linebreak-style": 0,
-    "comma-dangle": 0,
-    "quotes": 0,
-    "quote-props": 0,
-    "import/newline-after-import": 0,
-    "no-console": 0,
-    "class-methods-use-this": 0,
-    ""
+    camelcase: 0,
+    'class-methods-use-this': 0,
+    'no-underscore-dangle': 0,
+    'no-console': 0,
+    'no-param-reassign': 0,
+    'max-len': 0,
   },
 };
