@@ -13,6 +13,24 @@ const projetoController = new ProjetoController
 router.get('/', (req, res) => {res.send('API SQUAD1 ORANGE >> ONLINE!')})
 
 
+
+router.put("/user/foto/:id", multer(multerConfig).single('file'), async (req, res) => {
+    const { originalname: name, size, key, location: url = '' } = req.file
+    const id = req.params.id 
+    if (!id) return res.status(422).json({ msg: 'Usuário não encontrado' });
+
+    const user = await User.findById(id, '-password')
+
+    try {
+        user.profilePicture = { name, size, key, url }
+        user.save()
+        res.status(200).json(user.profilePicture)
+    } catch (erro) {
+        console.log(erro)
+        return res.status(500).send(erro);
+    }
+
+})
 // PROJETOS
 
 router.get("/projetos/all", projetoController.mostrarTodosProjetos)

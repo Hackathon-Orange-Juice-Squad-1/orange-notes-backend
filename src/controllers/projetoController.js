@@ -6,7 +6,6 @@ class ProjetoController {
 
         const id = req.params.id 
         const {title, tags, link, desc} = req.body
-        console.log
         
         if (!id) return res.status(422).json({ msg: 'Usuário não encontrado' });
         if (!title) return res.status(422).json({ msg: 'O título é obrigatório!' });

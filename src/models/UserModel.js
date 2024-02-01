@@ -30,6 +30,7 @@ const projetoSchema = new mongoose.Schema({
         return `${dia}/${mes}`;
       },
     },
+
   });
 
 const User = mongoose.model('User',{
@@ -37,7 +38,13 @@ const User = mongoose.model('User',{
     last_name: {type: String, required: true},
     email: {type: String, required: true, unique:true},
     password: {type: mongoose.Schema.Types.Mixed, required: true},
-    projetos: [projetoSchema]
+    projetos: [projetoSchema],
+    profilePicture: {
+      name: {type: String},
+      size: {type: Number},
+      key: {type: String},
+      url: {type: String},
+    },
 })
 
 module.exports = User
