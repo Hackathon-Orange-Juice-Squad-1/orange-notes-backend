@@ -39,7 +39,8 @@ class ProjetoController {
         const todosProjetos = usuarios.reduce((projetos, usuario) => {
             return projetos.concat(usuario.projetos);
         }, []);
-        return res.status(200).json({todosProjetos})
+        const projetosEmOrdem = [...todosProjetos].slice(0).reverse();
+        return res.status(200).json({projetosEmOrdem})
     }
 }
 
