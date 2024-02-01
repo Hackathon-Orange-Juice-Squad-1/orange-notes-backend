@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 
 const projetoSchema = new mongoose.Schema({
-    title: {type: String, required: true},
-    tags: { type: [String], default: [], required: true},
-    link: {type: String, required: true},
-    desc: {type: String, required: true},
+    title: {type: String},
+    tags: { type: [String], default: []},
+    link: {type: String},
+    desc: {type: String},
+    userName: {type: String},
     image: {
       name: {type: String},
       size: {type: Number},

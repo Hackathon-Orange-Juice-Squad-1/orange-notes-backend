@@ -3,18 +3,20 @@ const User = require('../models/UserModel');
 class ProjetoController {
     async cadastrarProjeto(req,res) {
         const { originalname: name, size, key, location: url = '' } = req.file
-        
+
         const id = req.params.id 
         const {title, tags, link, desc} = req.body
+        console.log
         
         if (!id) return res.status(422).json({ msg: 'Usuário não encontrado' });
         if (!title) return res.status(422).json({ msg: 'O título é obrigatório!' });
         if (!tags) return res.status(422).json({ msg: 'As tags são obrigatória!' });
         if (!link) return res.status(422).json({ msg: 'O link é obrigatório!' });
         if (!desc) return res.status(422).json({ msg: 'A descrição é obrigatório!' });
-        
+
         const user = await User.findById(id, '-password')
-        const projeto = {title, tags, link, desc, image: {name, size, key, url}}
+        const userName = `${user.first_name} ${user.last_name}`
+        const projeto = {title, tags, link, desc, userName, image: {name, size, key, url}}
         
         try{
             user.projetos.unshift(projeto) 
@@ -37,7 +39,7 @@ class ProjetoController {
         const todosProjetos = usuarios.reduce((projetos, usuario) => {
             return projetos.concat(usuario.projetos);
         }, []);
-        return res.status(200).json([...todosProjetos].slice(0).reverse()) // Projetos mostrados em ordem de recente
+        return res.status(200).json(todosProjetos)
     }
 
     async atualizarProjeto(req, res) {
