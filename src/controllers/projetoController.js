@@ -4,8 +4,6 @@ class ProjetoController {
     async cadastrarProjeto(req,res) {
         const { originalname: name, size, key, location: url = '' } = req.file
         
-        console.log(req.body);
-        
         const id = req.params.id 
         const {title, tags, link, desc} = req.body
         
@@ -39,13 +37,49 @@ class ProjetoController {
         const todosProjetos = usuarios.reduce((projetos, usuario) => {
             return projetos.concat(usuario.projetos);
         }, []);
-        const projetosEmOrdem = [...todosProjetos].slice(0).reverse();
-        return res.status(200).json({projetosEmOrdem})
+        return res.status(200).json([...todosProjetos].slice(0).reverse()) // Projetos mostrados em ordem de recente
+    }
+
+    async atualizarProjeto(req, res) {
+        const file = req.file;
+        // const { originalname: name, size, key, location: url = '' } = req.file
+        const idUser = req.params.idUser
+        const idProjeto = req.params.idProjeto
+        const {title, tags, link, desc} = req.body
+        
+        if (!idUser) return res.status(422).json({ msg: 'Usuário não encontrado' });
+        
+        const user = await User.findById(idUser, '-password')
+        const indiceProjeto = user.projetos.findIndex(projeto => projeto._id.toString() === idProjeto);
+        
+        if (indiceProjeto !== -1) {
+            // Atualizar apenas os campos presentes no objeto enviado pelo usuário
+            if (title) user.projetos[indiceProjeto].title = title;
+            if (tags) user.projetos[indiceProjeto].tags = tags;
+            if (link) user.projetos[indiceProjeto].link = link;
+            if (desc) user.projetos[indiceProjeto].desc = desc;
+            if (file && file.originalname && file.size && file.key) {
+                user.projetos[indiceProjeto].image = {
+                  originalname: file.originalname,
+                  size: file.size,
+                  key: file.key,
+                  url: file.location || '',
+                };
+              }
+
+            // Atualizando dia e mês
+            const now = new Date();
+            const dia = now.getDate().toString().padStart(2, '0'); // Garante que tenha dois dígitos
+            const mes = (now.getMonth() + 1).toString().padStart(2, '0'); // Meses são de 0 a 11
+            user.projetos[indiceProjeto].dataAtualizacao = `${dia}/${mes}`
+            
+            await user.save();
+            return res.json(user.projetos[indiceProjeto]);
+        } else return res.status(404).json({ msg: 'Projeto não encontrado' });
     }
 
     async deletarProjeto(req, res) {
         const { idUser, idProjeto } = req.params
-        console.log(idUser, idProjeto)
         const user = await User.findById(idUser);
         if (!user) return res.status(404).json({msg:'Usuário não encontrado'})
         const indiceProjeto = user.projetos.findIndex(projeto => projeto._id.toString() === idProjeto);

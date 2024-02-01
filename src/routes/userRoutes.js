@@ -15,12 +15,11 @@ router.get('/', (req, res) => {res.send('API SQUAD1 ORANGE >> ONLINE!')})
 
 // PROJETOS
 
-router.delete("/projetos/:idUser/:idProjeto", projetoController.deletarProjeto)
-
-
 router.get("/projetos/all", projetoController.mostrarTodosProjetos)
 router.get("/projetos/:id", projetoController.mostrarProjeto) //Retorna projetos do usuário pro front
 router.post("/projetos/:id", multer(multerConfig).single('file'), projetoController.cadastrarProjeto)
+router.delete("/projetos/:idUser/:idProjeto", projetoController.deletarProjeto)
+router.put("/projetos/:idUser/:idProjeto", multer(multerConfig).single('file'), projetoController.atualizarProjeto)
 
 // AUTH 
 
