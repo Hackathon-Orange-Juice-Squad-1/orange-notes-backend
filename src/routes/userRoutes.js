@@ -15,9 +15,7 @@ router.get('/', (req, res) => {res.send('API SQUAD1 ORANGE >> ONLINE!')})
 
 // PROJETOS
 
-router.delete("projetos/:id", async (req, res) => {
-
-})
+router.delete("/projetos/:idUser/:idProjeto", projetoController.deletarProjeto)
 
 
 router.get("/projetos/all", projetoController.mostrarTodosProjetos)

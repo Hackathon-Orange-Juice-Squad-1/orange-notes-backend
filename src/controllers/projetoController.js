@@ -42,6 +42,25 @@ class ProjetoController {
         const projetosEmOrdem = [...todosProjetos].slice(0).reverse();
         return res.status(200).json({projetosEmOrdem})
     }
+
+    async deletarProjeto(req, res) {
+        const { idUser, idProjeto } = req.params
+        console.log(idUser, idProjeto)
+        const user = await User.findById(idUser);
+        if (!user) return res.status(404).json({msg:'Usuário não encontrado'})
+        const indiceProjeto = user.projetos.findIndex(projeto => projeto._id.toString() === idProjeto);
+
+        try {
+            if (indiceProjeto !== -1) {
+                user.projetos.splice(indiceProjeto, 1);
+                await user.save();
+                return res.status(201).json({msg: 'Projeto excluido com sucesso'})
+            }
+        } catch (error) {
+            return res.send(error)
+        }
+
+    }
 }
 
 
