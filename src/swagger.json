@@ -1,0 +1,76 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "API de portfólios online.",
+        "description": "Nesta Api você pode adicionar projetos autorais em seu perfil e também acessar projetos de outros contribuidores.",
+        "termsOfService": "termsOfService",
+        "contact": {
+            "email": "squadorange1@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": ""  ,
+            "description": "API de produção"     
+        }
+    ],
+    "paths":{
+        "/auth/register":{
+            "post": {
+                "summary": "Cadastro de usuário",
+                "description": "Essa rota será responsável por cadastrar o usuário.",
+                "tags": ["User"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref":"#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                    "first_name": "Camila",
+                                    "last_name": "Soares",
+                                    "email": "camilasoares@gmail.com",
+                                    "password": "user@4575",
+                                    "confirmpassword": "user@4575"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "type":"string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "email": {
+                    "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },              
+                    "confirmpassword": {
+                        "type": "string"
+                    }
+            }
+            
+        }
+    }
+}
+}
+
