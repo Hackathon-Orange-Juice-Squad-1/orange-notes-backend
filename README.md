@@ -12,6 +12,7 @@
 ## 🛠️ Funcionalidades da API
 - Criação e Login de usuários, via nossa própria API;
 - Criação, edição e deleção de projetos;
+- Update de fotos para o usuário;
 - Salvamento de imagens na cloud via AWS S3, visando não sobrecarregar o sistema;
 
 
