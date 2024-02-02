@@ -23,6 +23,7 @@ router.put('/projetos/:idUser/:idProjeto', multer(multerConfig).single('file'), 
 // ROTAS DE AUTH
 router.post('/auth/register', userController.cadastro);
 router.post('/auth/login', userController.login);
+router.post('/auth/googleLogin', userController.loginGoogle);
 
 router.get('/', (req, res) => {
   res.send('<h2>API SQUAD1 ORANGE >> ONLINE!</h2><a href="https://github.com/Hackathon-Orange-Juice-Squad-1/orange-notes-backend">Nosso Github </a>');

@@ -92,6 +92,44 @@ class UserController {
       return res.status(500).json(err);
     }
   }
+
+  async loginGoogle(req, res) {
+    const {
+      email, displayName, uid, photoURL,
+    } = req.body;
+    const user = User.findOne({ email });
+
+    if (!user) {
+      const palavras = displayName.split(' '); // Separando o displayName para salvar no banco de dados
+      const first_name = palavras[0];
+      const last_name = palavras.slice(1).join(' ');
+      const salt = await bcrypt.genSalt(12);
+      const passwordHash = await bcrypt.hash(uid, salt);
+      const novoUser = new User({
+        first_name, last_name, email, password: passwordHash, profilePicture: { url: photoURL },
+      });
+      try {
+        await novoUser.save();
+        const { secret } = process.env;
+        const token = jwt.sign({ id: novoUser._id }, secret);
+        return res.status(201).json({ msg: 'Usuário criado com sucesso!', token });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ msg: 'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!' });
+      }
+    } else {
+      const checkPassword = await bcrypt.compare(uid, user.password);
+      if (!checkPassword) return res.status(422).json({ msg: 'Usuário ou senha inválidas!' });
+      try {
+        const { secret } = process.env;
+        const token = jwt.sign({ id: user._id }, secret);
+        return res.status(200).json({ msg: 'Autenticação realizada com sucesso.', token });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ msg: 'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!', error });
+      }
+    }
+  }
 }
 
 module.exports = UserController;
