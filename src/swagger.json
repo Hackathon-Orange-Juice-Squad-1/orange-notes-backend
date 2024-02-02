@@ -1,9 +1,8 @@
 {
-    "openapi": "3.1.0",
+    "openapi": "3.0.0",
     "info": {
         "title": "API de portfólios online.",
         "description": "Nesta Api você pode adicionar projetos autorais em seu perfil e também acessar projetos de outros contribuidores.",
-        "termsOfService": "termsOfService",
         "contact": {
             "email": "squadorange1@gmail.com"
         },
@@ -11,38 +10,167 @@
     },
     "servers": [
         {
-            "url": ""  ,
-            "description": "API de produção"     
+            "url": "http://localhost:3000/v1",
+            "description": "API de produção"
         }
     ],
-    "paths":{
-        "/auth/register":{
+    "paths": {
+        "/auth/register": {
             "post": {
                 "summary": "Cadastro de usuário",
                 "description": "Essa rota será responsável por cadastrar o usuário.",
-                "tags": ["User"],
+                "tags": [
+                    "User"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref":"#/components/schemas/User"
+                                "$ref": "#/components/schemas/User"
                             },
                             "examples": {
                                 "user": {
                                     "value": {
-                                    "first_name": "Camila",
-                                    "last_name": "Soares",
-                                    "email": "camilasoares@gmail.com",
-                                    "password": "user@4575",
-                                    "confirmpassword": "user@4575"
+                                        "first_name": "Olivia",
+                                        "last_name": "Dias",
+                                        "email": "oliviadias@gmail.com",
+                                        "password": "oli2506*/",
+                                        "confirmpassword": "oli2506*/"
                                     }
                                 }
                             }
                         }
                     }
                 },
-                "response": {
-                    
+                "responses": {
+                    "422": {
+                        "description": "Erro de validação."
+                    },
+                    "400": {
+                        "description": "Usuário já existente."
+                    },
+                    "200": {
+                        "description": "Usuário criado com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "Login de usuário.",
+                "description": "Essa rota será responsável por logar um usuário.",
+                "tags": [
+                    "User"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "&ref": "#/components/schemas/UserLogin"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "email": "oliviadias@gmail.com",
+                                        "password": "oli2506*/"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "O email e a senha são obrigatórios!"
+                    },
+                    "404": {
+                        "description": "Usuário ou senha inválidas!"
+                    },
+                    "200": {
+                        "description": "Usuário logado com sucesso!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserLogin"
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/googleLogin": {
+            "post": {
+                "summary": "Login de usuário via Google.",
+                "description": "Essa rota será responsável por logar o usuário via Google.",
+                "tags": [
+                    "User"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserGoogle"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "email": "oliviadias@gmail.com",
+                                        "displayname": "Olivia Dias",
+                                        "uid": "e61da4f0a11da622e6598d",
+                                        "photoURL":"https://th.bing.com/th/id/R.b669e33c5b2467d1aea666a6f5392e95?rik=rqTYksA4Umiz2Q&pid=ImgRaw&r=0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso!"
+                    },
+                    "200": {
+                        "description": "Autenticação realizada com sucesso."
+                    },
+                    "422": {
+                        "description": "Usuário ou senha inválidas!"
+                    },
+                    "500": {
+                        "description": "Aconteceu um erro no servidor, por favor, tente novamente mais tarde!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserGoogle"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -53,24 +181,57 @@
                 "type": "object",
                 "properties": {
                     "first_name": {
-                        "type":"string"
+                        "type": "string"
                     },
                     "last_name": {
                         "type": "string"
                     },
                     "email": {
-                    "type": "string"
+                        "type": "string"
                     },
                     "password": {
                         "type": "string"
-                    },              
+                    },
                     "confirmpassword": {
                         "type": "string"
                     }
+                }
+            },
+            "UserLogin": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserGoogle": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "displayname": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "type": "string"
+                    },
+                    "photoURL": {
+                    "type": "string"
+                    }
+                }
             }
-            
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
         }
     }
 }
-}
-

@@ -8,12 +8,8 @@ class UserController {
     const {
       first_name, last_name, email, password, confirmpassword,
     } = req.body;
-    if (!first_name) return res.status(422).json({ msg: 'O nome é obrigatório!' });
-    if (!last_name) return res.status(422).json({ msg: 'O sobrenome é obrigatório!' });
-    if (!email) return res.status(422).json({ msg: 'O email é obrigatório!' });
-    if (!password) return res.status(422).json({ msg: 'A senha é obrigatória!' });
-    if (typeof password !== 'string') return res.status(422).json({ msg: 'Sua senha precisa ser uma string' });
-    if (password !== confirmpassword) return res.status(422).json({ msg: 'As senhas não conferem!' });
+    if (!first_name || !last_name || !email || !password || !confirmpassword) return res.status(422).json({ msg: 'Todos os campos, são obrigatórios!' });
+    if (password !== confirmpassword) return res.status(400).json({ msg: 'As senhas não conferem!' });
     if (password.length <= 6) return res.status(422).json({ msg: 'A senha precisa ter no mínimo de 7 digitos!' });
     // checagem de email existente
     const UserExists = await User.findOne({ email });
@@ -41,8 +37,7 @@ class UserController {
   async login(req, res) {
     const { email, password } = req.body;
 
-    if (!email) return res.status(422).json({ msg: 'O email é obrigatório!' });
-    if (!password) return res.status(422).json({ msg: 'A senha é obrigatória!' });
+    if (!email || !password) return res.status(422).json({ msg: 'O email e a senha são obrigatórios!' });
 
     const UserExists = await User.findOne({ email });
     if (!UserExists) return res.status(404).json({ msg: 'Usuário ou senha inválidas!' });
