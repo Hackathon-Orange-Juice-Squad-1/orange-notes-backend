@@ -66,9 +66,9 @@ class UserController {
     } = req.file;
     const { id } = req.params;
     if (!id) return res.status(422).json({ msg: 'Usuário não encontrado' });
-  
+
     const user = await User.findById(id, '-password');
-  
+
     try {
       user.profilePicture = {
         name, size, key, url,
@@ -78,6 +78,18 @@ class UserController {
     } catch (erro) {
       console.log(erro);
       return res.status(500).send(erro);
+    }
+  }
+
+  async excluirPerfil(req, res) {
+    const { id } = req.params;
+    if (!id) return res.status(422).json({ msg: 'Usuário não encontrado!' });
+
+    try {
+      await User.findByIdAndDelete(id);
+      return res.status(200).json({ msg: 'Usuário excluído com sucesso.' });
+    } catch (err) {
+      return res.status(500).json(err);
     }
   }
 }
