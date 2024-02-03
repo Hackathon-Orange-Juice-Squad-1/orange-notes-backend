@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "API de portfólios online.",
-        "description": "Nesta Api você pode adicionar projetos autorais em seu perfil e também acessar projetos de outros contribuidores.",
+        "description": "Nesta API você pode adicionar projetos autorais em seu perfil e também acessar projetos de outros contribuidores.",
         "contact": {
             "email": "squadorange1@gmail.com"
         },
@@ -31,7 +31,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/User"
+                                "$ref": "#/components/schemas/userRegister"
                             },
                             "examples": {
                                 "user": {
@@ -60,7 +60,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/User"
+                                    "$ref": "#/components/schemas/userRegister"
                                 }
                             }
                         }
@@ -84,7 +84,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "&ref": "#/components/schemas/UserLogin"
+                                "&ref": "#/components/schemas/userLogin"
                             },
                             "examples": {
                                 "user": {
@@ -110,7 +110,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/UserLogin"
+                                    "$ref": "#/components/schemas/userLogin"
                                 }
                             }
                         }
@@ -134,7 +134,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/UserGoogle"
+                                "$ref": "#/components/schemas/userGoogle"
                             },
                             "examples": {
                                 "user": {
@@ -165,8 +165,83 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "$ref": "#/components/schemas/UserGoogle"
+                                    "$ref": "#/components/schemas/userGoogle"
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/delete/:id": {
+            "delete": {
+                "summary": "Exclui um usuário.",
+                "description": "Essa rota será responsável por excluir um usuário, através do id.",
+                "tags": [
+                    "User"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário excluído com sucesso."
+                    },
+                    "422": {
+                        "description": "Usuário não encontrado!"
+                    },
+                    "500": {
+                        "description": "Aconteceu um erro no servidor, por favor, tente novamente mais tarde!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/excluirPerfil"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/projetos/all": {
+            "get": {
+                "summary": "Mostra todos os projeto de todos os usuários.",
+                "description": "Essa rota será responsável por mostrar os todos projetos de todos os usuários.",
+                "tags": [
+                    "Projeto"
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/mostrarTodosProjetos"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Todos os campos são obrigatórios!"
+                    },
+                    "200": {
+                        "description": "Projetos"
+                    },
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/mostrarTodosProjetos"
                             }
                         }
                     }
@@ -175,16 +250,21 @@
         },
         "/projetos/:id": {
             "post": {
-                "summary": "Cadastro de projeto.",
+                "summary": "Cadastro de projeto",
                 "description": "Essa rota será responsável por criar um projeto, utilizando o id do usuário.",
                 "tags": [
                     "Projeto"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
                 ],
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/Projeto"
+                                "$ref": "#/components/schemas/projetoRegister"
                             },
                             "examples": {
                                 "user": {
@@ -211,7 +291,144 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "$ref": "#/components/schemas/Projeto"
+                                "$ref": "#/components/schemas/projetoRegister"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Mostra todos os projeto do usuário.",
+                "description": "Essa rota será responsável por mostrar os projetos do usuário.",
+                "tags": [
+                    "Projeto"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "params",
+                        "description": "Usuário ID",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/mostrarProjeto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Todos os campos são obrigatórios!"
+                    },
+                    "200": {
+                        "description": "Projetos do usuário"
+                    },
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/mostrarProjeto"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/projetos/:idUser/:idProjeto": {
+            "put": {
+                "description": "Alterar projeto pelo id do projeto",
+                "summary": "Altera o produto pelo id do projeto",
+                "tags": [
+                    "Projeto"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "params",
+                        "description": "Usuário ID",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/projetoRegister"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "title": "Meu projeto",
+                                        "tags": "html, css, js",
+                                        "link": "linkprojeto",
+                                        "desc": "Meu primeiro projeto",
+                                        "image": "imagem.png"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "404": {
+                        "description": "Projeto não encontrado"
+                    },
+                    "200": {
+                        "description": "Projeto atualizado com sucesso.",
+                        "content": {
+                            "multipart/form-data": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/deletarProjeto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Deleta projeto através do id do projeto.",
+                "description": "Essa rota será responsável por deletar um projeto, através do id do projeto.",
+                "tags": [
+                    "Projeto"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "params",
+                        "description": "Projeto ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Usuário não encontrado!"
+                    },
+                    "201": {
+                        "description": "Projeto excluido com sucesso."
+                    },
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/deletarProjeto"
                             }
                         }
                     }
@@ -221,9 +438,13 @@
     },
     "components": {
         "schemas": {
-            "User": {
+            "userRegister": {
                 "type": "object",
                 "properties": {
+                    "id": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "first_name": {
                         "type": "string"
                     },
@@ -241,7 +462,7 @@
                     }
                 }
             },
-            "UserLogin": {
+            "userLogin": {
                 "type": "object",
                 "properties": {
                     "username": {
@@ -252,7 +473,7 @@
                     }
                 }
             },
-            "UserGoogle": {
+            "userGoogle": {
                 "type": "object",
                 "properties": {
                     "email": {
@@ -269,7 +490,15 @@
                     }
                 }
             },
-            "Projeto": {
+            "excluirPerfil": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "projetoRegister": {
                 "type": "object",
                 "properties": {
                     "title": {
@@ -354,13 +583,13 @@
                     }
                 }
             }
-        },
-        "securitySchemes": {
-            "bearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            }
+        }
+    },
+    "securitySchemes": {
+        "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
         }
     }
 }
