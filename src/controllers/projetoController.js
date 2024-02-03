@@ -2,16 +2,12 @@ const User = require('../models/UserModel');
 
 class ProjetoController {
   async cadastrarProjeto(req, res) {
-    const {
-      originalname: name, size, key, location: url = '',
-    } = req.file;
-
     const { id } = req.params;
     const {
       title, tags, link, desc,
     } = req.body;
 
-    if (!id || !title || !tags || !link || !desc) return res.status(422).json({ msg: 'Todos os campos são obrigatórios!'});
+    if (!id || !title || !tags || !link || !desc) return res.status(422).json({ msg: 'Todos os campos são obrigatórios!' });
 
     const user = await User.findById(id, '-password');
     const userName = `${user.first_name} ${user.last_name}`;
@@ -21,10 +17,17 @@ class ProjetoController {
       link,
       desc,
       userName,
-      image: {
-        name, size, key, url,
-      },
     };
+
+    if (req.file) {
+      const {
+        originalname: name, size, key, location: url = '',
+      } = req.file;
+
+      projeto.image = {
+        name, size, key, url,
+      };
+    }
 
     try {
       user.projetos.unshift(projeto);
