@@ -11,11 +11,7 @@ class ProjetoController {
       title, tags, link, desc,
     } = req.body;
 
-    if (!id) return res.status(422).json({ msg: 'Usuário não encontrado' });
-    if (!title) return res.status(422).json({ msg: 'O título é obrigatório!' });
-    if (!tags) return res.status(422).json({ msg: 'As tags são obrigatória!' });
-    if (!link) return res.status(422).json({ msg: 'O link é obrigatório!' });
-    if (!desc) return res.status(422).json({ msg: 'A descrição é obrigatório!' });
+    if (!id || !title || !tags || !link || !desc) return res.status(422).json({ msg: 'Todos os campos são obrigatórios!'});
 
     const user = await User.findById(id, '-password');
     const userName = `${user.first_name} ${user.last_name}`;

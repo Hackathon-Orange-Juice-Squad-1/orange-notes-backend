@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:3000/v1",
+            "url": "http://localhost:3000",
             "description": "API de produção"
         }
     ],
@@ -113,7 +113,6 @@
                                     "$ref": "#/components/schemas/UserLogin"
                                 }
                             }
-                            
                         }
                     }
                 }
@@ -143,7 +142,7 @@
                                         "email": "oliviadias@gmail.com",
                                         "displayname": "Olivia Dias",
                                         "uid": "e61da4f0a11da622e6598d",
-                                        "photoURL":"https://th.bing.com/th/id/R.b669e33c5b2467d1aea666a6f5392e95?rik=rqTYksA4Umiz2Q&pid=ImgRaw&r=0"
+                                        "photoURL": "http://th.bing.com/th/id/R.b669e33c5b2467d1aea666a6f5392e95?rik=rqTYksA4Umiz2Q&pid=ImgRaw&r=0"
                                     }
                                 }
                             }
@@ -168,6 +167,51 @@
                                     "type": "object",
                                     "$ref": "#/components/schemas/UserGoogle"
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/projetos/:id": {
+            "post": {
+                "summary": "Cadastro de projeto.",
+                "description": "Essa rota será responsável por criar um projeto, utilizando o id do usuário.",
+                "tags": [
+                    "Projeto"
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Projeto"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "title": "Meu projeto",
+                                        "tags": "html, css, js",
+                                        "link": "linkprojeto",
+                                        "desc": "Meu primeiro projeto",
+                                        "image": "imagem.png"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Todos os campos são obrigatórios!"
+                    },
+                    "200": {
+                        "description": "Projeto cadastrado com sucesso."
+                    },
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/Projeto"
                             }
                         }
                     }
@@ -221,7 +265,92 @@
                         "type": "string"
                     },
                     "photoURL": {
-                    "type": "string"
+                        "type": "string"
+                    }
+                }
+            },
+            "Projeto": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "link": {
+                        "type": "string"
+                    },
+                    "desc": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    }
+                }
+            },
+            "mostrarProjeto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "mostrarTodosProjetos": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "type": {}
+                    },
+                    "projetos": {
+                        "type": "string"
+                    }
+                }
+            },
+            "atualizarProjeto": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "link": {
+                        "type": "string"
+                    },
+                    "desc": {
+                        "type": "string"
+                    }
+                }
+            },
+            "deletarProjeto": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "link": {
+                        "type": "string"
+                    },
+                    "desc": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
                     }
                 }
             }
