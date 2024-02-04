@@ -60,9 +60,9 @@ class UserController {
       originalname: name, size, key, location: url = '',
     } = req.file;
     const { id } = req.params;
-    if (!id) return res.status(422).json({ msg: 'Usuário não encontrado' });
-
     const user = await User.findById(id, '-password');
+    if (!user) return res.status(422).json({ msg: 'Usuário não encontrado' });
+
 
     try {
       user.profilePicture = {
@@ -123,6 +123,27 @@ class UserController {
         console.log(error);
         return res.status(500).json({ msg: 'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!', error });
       }
+    }
+  }
+
+  async userInfo (req, res) {
+    const userId = req.params.id;
+
+    try {
+      const user = await User.findById(userId, '-password');
+
+      if (!user) {
+        return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado' });
+      }
+
+      return res.status(200).json({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profilePicture: user.profilePicture,
+      });
+    } catch (erro) {
+      console.error(erro);
+      return res.status(500).json({mensagem: 'Erro interno ao obter informações do usuário' });
     }
   }
 }

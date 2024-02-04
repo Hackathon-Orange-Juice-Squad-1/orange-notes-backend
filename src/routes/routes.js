@@ -12,6 +12,7 @@ const projetoController = new ProjetoController();
 // ROTAS DE USER
 router.delete('/user/delete/:id', userController.excluirPerfil);
 router.put('/user/foto/:id', multer(multerConfig).single('file'), userController.mudarFotoPerfil);
+router.get('/user/:id', userController.userInfo)
 
 // ROTAS DE PROJETOS
 router.get('/projetos/all', projetoController.mostrarTodosProjetos);
