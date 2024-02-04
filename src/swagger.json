@@ -352,7 +352,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": ["idUser, idProjeto"],
+                        "name": [
+                            "idUser, idProjeto"
+                        ],
                         "in": "params",
                         "description": "idUser, idProjeto",
                         "required": true
@@ -411,7 +413,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": ["idUser, idProjeto"],
+                        "name": [
+                            "idUser, idProjeto"
+                        ],
                         "in": "params",
                         "description": "idUser, idProjeto",
                         "required": true
@@ -583,13 +587,13 @@
                     }
                 }
             }
-        }
-    },
-    "securitySchemes": {
-        "bearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
         }
     }
 }
