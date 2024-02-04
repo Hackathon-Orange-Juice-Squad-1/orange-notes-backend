@@ -345,16 +345,16 @@
         },
         "/projetos/:idUser/:idProjeto": {
             "put": {
-                "description": "Alterar projeto pelo id do projeto",
-                "summary": "Altera o produto pelo id do projeto",
+                "description": "Alterar projeto pelo id do projeto e o id do usuário.",
+                "summary": "Altera o produto pelo id do projeto e o id do usuário.",
                 "tags": [
                     "Projeto"
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": ["idUser, idProjeto"],
                         "in": "params",
-                        "description": "Usuário ID",
+                        "description": "idUser, idProjeto",
                         "required": true
                     }
                 ],
@@ -399,8 +399,8 @@
                 }
             },
             "delete": {
-                "summary": "Deleta projeto através do id do projeto.",
-                "description": "Essa rota será responsável por deletar um projeto, através do id do projeto.",
+                "summary": "Deleta projeto através do id do projeto e o id do usuário..",
+                "description": "Essa rota será responsável por deletar um projeto, através do id do projeto e o id do usuário.",
                 "tags": [
                     "Projeto"
                 ],
@@ -411,9 +411,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": ["idUser, idProjeto"],
                         "in": "params",
-                        "description": "Projeto ID",
+                        "description": "idUser, idProjeto",
                         "required": true
                     }
                 ],
