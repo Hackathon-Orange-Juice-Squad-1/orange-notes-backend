@@ -445,10 +445,6 @@
             "userRegister": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "readOnly": true
-                    },
                     "first_name": {
                         "type": "string"
                     },
@@ -474,6 +470,9 @@
                     },
                     "password": {
                         "type": "string"
+                    },
+                    "id": {
+                        "type": "object"
                     }
                 }
             },

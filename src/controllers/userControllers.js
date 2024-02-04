@@ -2,7 +2,7 @@ require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
-
+const { jwtDecode } = require('jwt-decode');
 class UserController {
   async cadastro(req, res) {
     const {
@@ -48,7 +48,8 @@ class UserController {
     try {
       const { secret } = process.env;
       const token = jwt.sign({ id: UserExists._id }, secret);
-      return res.status(200).json({ msg: 'Autenticação realizada com sucesso.', token });
+      const decoded = jwtDecode(token)
+      return res.status(200).json({ msg: 'Autenticação realizada com sucesso.', token, decoded });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ msg: 'Aconteceu um erro no servidor, por favor, tente novamente mais tarde!', error });
@@ -126,7 +127,7 @@ class UserController {
     }
   }
 
-  async userInfo (req, res) {
+  async userInfo(req, res) {
     const userId = req.params.id;
 
     try {
@@ -143,7 +144,7 @@ class UserController {
       });
     } catch (erro) {
       console.error(erro);
-      return res.status(500).json({mensagem: 'Erro interno ao obter informações do usuário' });
+      return res.status(500).json({ mensagem: 'Erro interno ao obter informações do usuário' });
     }
   }
 }
