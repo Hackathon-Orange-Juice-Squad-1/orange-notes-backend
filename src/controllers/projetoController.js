@@ -103,7 +103,7 @@ class ProjetoController {
       }
       return res.status(201).json({ msg: 'Projeto excluido com sucesso' });
     } catch (error) {
-      return res.send(error);
+      return res.status(422).json({ msg: 'Não foi encontrado o projeto do usuário', error });
     }
   }
 }

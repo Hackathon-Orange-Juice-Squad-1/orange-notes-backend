@@ -1,8 +1,9 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/UserModel');
 const { jwtDecode } = require('jwt-decode');
+const User = require('../models/UserModel');
+
 class UserController {
   async cadastro(req, res) {
     const {
@@ -27,7 +28,7 @@ class UserController {
       await user.save();
       const { secret } = process.env;
       const token = jwt.sign({ id: user._id }, secret);
-      const decoded = jwtDecode(token)
+      const decoded = jwtDecode(token);
       return res.status(201).json({ msg: 'Usuário criado com sucesso!', token, decoded });
     } catch (error) {
       console.log(error);
@@ -49,7 +50,7 @@ class UserController {
     try {
       const { secret } = process.env;
       const token = jwt.sign({ id: UserExists._id }, secret);
-      const decoded = jwtDecode(token)
+      const decoded = jwtDecode(token);
       return res.status(200).json({ msg: 'Autenticação realizada com sucesso.', token, decoded });
     } catch (error) {
       console.log(error);
@@ -65,7 +66,6 @@ class UserController {
     const user = await User.findById(id, '-password');
     if (!user) return res.status(422).json({ msg: 'Usuário não encontrado' });
 
-
     try {
       user.profilePicture = {
         name, size, key, url,
@@ -80,7 +80,10 @@ class UserController {
 
   async excluirPerfil(req, res) {
     const { id } = req.params;
-    if (!id) return res.status(422).json({ msg: 'Usuário não encontrado!' });
+    if (!id) return res.status(422).json({ msg: 'Por favor, insira um ID válido!' });
+
+    const UserExists = User.findOne({ id });
+    if (!UserExists) return res.status(422).json({ msg: 'Usuário não encontrado.' });
 
     try {
       await User.findByIdAndDelete(id);
